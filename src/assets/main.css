@@ -1,0 +1,225 @@
+/* Добавляем шрифт Comic Sans MS для всего документа */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Chalkboard SE', sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #0c0c0c;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.header img {
+  width: 50px;
+  height: 50px;
+  margin-right: 14px;
+}
+
+.score {
+  color: #fff;
+  text-align: center;
+  font-size: 36px;
+  font-weight: 800;
+  user-select: none;
+  font-family: 'Chalkboard SE', sans-serif;
+}
+
+.circle {
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.game-container {
+  width: 200px;
+  margin: 0 auto;
+}
+
+
+
+.plus-one {
+  position: absolute;
+  font-family: 'Comic Neue', sans-serif; /* Применяем Comic Neue */
+  text-shadow: 0px 0px 4px rgba(234, 182, 64, 0.25);
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+  user-select: none;
+  animation: move-up 2s forwards;
+}
+
+.menu {
+  background: #000000;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: -1.8rem;
+  left: 1rem;
+  right: 1rem;
+  justify-content: space-around;
+  height: 60px;
+  border-radius: 20px;
+  font-size: 1.5rem;
+}
+
+.menu-button {
+  color: #4e4d52;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.menu-button:hover,
+.menu-button.active {
+  color: #fff;
+  cursor: pointer;
+}
+
+@keyframes move-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+.game {
+  position: relative;
+  padding: 1rem;
+}
+
+.page {
+  width: 100vw;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.progress {
+  position: fixed; /* Закрепляем внизу экрана */
+  bottom: 5rem; /* Отступ снизу */
+  left: 1rem; /* Отступ слева */
+  right: 1rem; /* Отступ справа */
+  max-width: 600px;
+  z-index: 100; /* Поверх других элементов */
+  margin: 0 auto;
+}
+
+.progress-level {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.progress-container {
+  position: relative;
+  width: 100%;
+  height: 16px; /* Увеличиваем высоту */
+  border-radius: 25px;
+  background: #2f2f2f;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.progress-value {
+  background: linear-gradient(90deg, #ffffff, #ffffff);
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 25px;
+  transition: width 0.4s ease;
+}
+.clicks-status {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #f0f0f0;
+  font-weight: bold;
+}
+
+.clicks-status span {
+  color: #ffeb3b;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.text-content {
+  color: #fff;
+}
+
+.text-content h1,
+.text-content h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.list {
+}
+
+.list-item {
+  background: #2a292e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.list-btn {
+  background: #fff;
+  color: #000;
+  border-radius: 20px;
+  padding: 0 0.5rem;
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+.list-btn.done {
+  background: #1fca1f;
+  color: #fff;
+}
+
+.referal {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background: rgb(255, 255, 255);
+  border: none;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
