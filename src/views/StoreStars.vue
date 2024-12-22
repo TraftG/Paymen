@@ -62,7 +62,7 @@ export default {
 
       const endpoint = productTitle === 'Starter Pack Expert' 
         ? 'https://rabbyinvoice.onrender.com/pack-invoice' 
-        : 'http://localhost:3000/generate-invoice';
+        : 'https://paymen-6a1f.onrender.com/generate-invoice';
 
       try {
         const response = await fetch(endpoint);
