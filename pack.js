@@ -2,12 +2,11 @@ import express from "express";
 import { Bot } from "grammy";
 import cors from "cors";
 
-
-
 const app = express();
-const port = 8080;
 
-// Enable CORS for all origins
+// Use Render's dynamic port
+const port = process.env.PORT || 8080;
+
 app.use(cors());
 app.use(express.json());
 
@@ -16,6 +15,11 @@ const bot = new Bot('6392442670:AAFxIkX7YW76odBJuX1_xXNhKPcnzWrOL3U'); // Your b
 // Store paid users (in memory for now, use a database in production)
 const paidUsers = new Map();
 
+// Add a handler for the root route
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 // Handle pre_checkout_query to confirm the order
 bot.on("pre_checkout_query", (ctx) => {
   return ctx.answerPreCheckoutQuery(true).catch(() => {
@@ -23,7 +27,6 @@ bot.on("pre_checkout_query", (ctx) => {
   });
 });
 
-// Handle the successful payment
 // Handle the successful payment
 bot.on("message", (ctx) => {
   const successfulPayment = ctx.message?.successful_payment;
@@ -44,15 +47,12 @@ bot.on("message", (ctx) => {
       amount: 10000,
     };
 
-
     console.log("Payment successful:", successfulPayment);
 
     // You can send a response back to the client here (or use your existing process)
-    // For example, you could send a signal to the frontend to trigger successful payment status
     return ctx.reply("Thank you for your payment! Your purchase has been completed.");
   }
 });
-
 
 // Handle the "/status" command to check payment status
 bot.command("status", (ctx) => {
@@ -81,8 +81,8 @@ bot.command("refund", (ctx) => {
 
 // Invoice link generation route
 app.get("/pack-invoice", async (req, res) => {
-  const title = "Starter Pack Expert";
-  const description = "Starter Pack Expert";
+  const title = "Starter Pack";
+  const description = "Starter Pack";
   const payload = "{}";
   const currency = "XTR";
   const prices = [{ amount: 100, label: "Starter Pack" }];
