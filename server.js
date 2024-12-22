@@ -3,9 +3,10 @@ import { Bot } from "grammy";
 import cors from "cors";
 
 const app = express();
-const port = 3000;
 
-// Enable CORS for all origins
+// Use Render's dynamic port
+const port = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
 
@@ -13,6 +14,11 @@ const bot = new Bot('6392442670:AAFxIkX7YW76odBJuX1_xXNhKPcnzWrOL3U'); // Your b
 
 // Store paid users (in memory for now, use a database in production)
 const paidUsers = new Map();
+
+// Add a handler for the root route
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
 
 // Handle pre_checkout_query to confirm the order
 bot.on("pre_checkout_query", (ctx) => {
@@ -37,13 +43,13 @@ bot.on("message", (ctx) => {
     const paymentData = {
       userId: ctx.from.id,
       status: 'paid',
-      product: 'Basic Pack',
-      amount: 5000, // Amount in the smallest currency unit (e.g., cents or XTR subunits)
+      product: 'Starter Pack',
+      amount: 10000,
     };
 
     console.log("Payment successful:", successfulPayment);
 
-    // Send a thank-you message to the user
+    // You can send a response back to the client here (or use your existing process)
     return ctx.reply("Thank you for your payment! Your purchase has been completed.");
   }
 });
@@ -75,11 +81,11 @@ bot.command("refund", (ctx) => {
 
 // Invoice link generation route
 app.get("/generate-invoice", async (req, res) => {
-  const title = "Starter Pack Dude";
-  const description = "Starter Pack Dude";
+  const title = "Starter Pack";
+  const description = "Starter Pack";
   const payload = "{}";
   const currency = "XTR";
-  const prices = [{ amount: 50, label: "Starter Pack Dude" }]; // Price set to 50 units, adjust for smallest currency unit
+  const prices = [{ amount: 50, label: "Starter Pack" }];
 
   try {
     const invoiceLink = await bot.api.createInvoiceLink(
