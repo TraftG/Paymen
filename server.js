@@ -168,6 +168,153 @@ app.get("/pack-invoice", async (req, res) => {
   }
 });
 
+bot.on("pre_checkout_query", (ctx) => {
+  return ctx.answerPreCheckoutQuery(true).catch(() => {
+    console.error("answerPreCheckoutQuery не удалось выполнить");
+  });
+});
+
+// Обработка успешного платежа
+bot.on("message", (ctx) => {
+  const successfulPayment = ctx.message?.successful_payment;
+  if (successfulPayment) {
+    // Сохранение информации о платеже
+    paidUsers.set(
+      ctx.from.id,
+      successfulPayment.telegram_payment_charge_id
+    );
+
+    console.log("Платеж успешен:", successfulPayment);
+
+    // Вы можете отправить ответ пользователю
+    return ctx.reply("Спасибо за ваш платеж! Ваша покупка завершена.");
+  }
+});
+
+// Обработка команды "/status" для проверки статуса платежа
+bot.command("status", (ctx) => {
+  const message = paidUsers.has(ctx.from.id)
+    ? "Вы оплатили."
+    : "Вы еще не оплатили.";
+  return ctx.reply(message);
+});
+
+// Обработка команды "/refund" для обработки возврата средств
+bot.command("refund", (ctx) => {
+  const userId = ctx.from.id;
+  if (!paidUsers.has(userId)) {
+    return ctx.reply("Вы еще не оплатили, нечего возвращать.");
+  }
+
+  // Логика возврата средств (пример, при необходимости подкорректируйте)
+  bot.api
+    .refundStarPayment(userId, paidUsers.get(userId)) // Пример метода возврата
+    .then(() => {
+      paidUsers.delete(userId); // Удаляем пользователя из списка оплаченных
+      return ctx.reply("Возврат успешен.");
+    })
+    .catch(() => ctx.reply("Возврат не удался. Попробуйте снова позже."));
+});
+
+// Генерация ссылки для счета
+app.get("/giant-invoice", async (req, res) => {
+  const title = "Starter Pack Giant";
+  const description = "Starter Pack Giant";
+  const payload = "{}";
+  const currency = "XTR";
+  const prices = [{ amount: 500, label: "Starter Pack" }];
+
+  try {
+    const invoiceLink = await bot.api.createInvoiceLink(
+      title,
+      description,
+      payload,
+      "", // Токен провайдера для Telegram Stars пустой
+      currency,
+      prices
+    );
+
+    const paymentId = 'some-generated-payment-id'; // Замените на реальную логику
+    res.json({ invoiceLink, paymentId });
+  } catch (error) {
+    res.status(500).json({ error: 'Не удалось создать ссылку для счета' });
+  }
+});
+
+bot.on("pre_checkout_query", (ctx) => {
+  return ctx.answerPreCheckoutQuery(true).catch(() => {
+    console.error("answerPreCheckoutQuery не удалось выполнить");
+  });
+});
+
+// Обработка успешного платежа
+bot.on("message", (ctx) => {
+  const successfulPayment = ctx.message?.successful_payment;
+  if (successfulPayment) {
+    // Сохранение информации о платеже
+    paidUsers.set(
+      ctx.from.id,
+      successfulPayment.telegram_payment_charge_id
+    );
+
+    console.log("Платеж успешен:", successfulPayment);
+
+    // Вы можете отправить ответ пользователю
+    return ctx.reply("Спасибо за ваш платеж! Ваша покупка завершена.");
+  }
+});
+
+// Обработка команды "/status" для проверки статуса платежа
+bot.command("status", (ctx) => {
+  const message = paidUsers.has(ctx.from.id)
+    ? "Вы оплатили."
+    : "Вы еще не оплатили.";
+  return ctx.reply(message);
+});
+
+// Обработка команды "/refund" для обработки возврата средств
+bot.command("refund", (ctx) => {
+  const userId = ctx.from.id;
+  if (!paidUsers.has(userId)) {
+    return ctx.reply("Вы еще не оплатили, нечего возвращать.");
+  }
+
+  // Логика возврата средств (пример, при необходимости подкорректируйте)
+  bot.api
+    .refundStarPayment(userId, paidUsers.get(userId)) // Пример метода возврата
+    .then(() => {
+      paidUsers.delete(userId); // Удаляем пользователя из списка оплаченных
+      return ctx.reply("Возврат успешен.");
+    })
+    .catch(() => ctx.reply("Возврат не удался. Попробуйте снова позже."));
+});
+
+// Генерация ссылки для счета
+app.get("/titan-invoice", async (req, res) => {
+  const title = "Starter Pack Titan";
+  const description = "Starter Pack Titan";
+  const payload = "{}";
+  const currency = "XTR";
+  const prices = [{ amount: 1000, label: "Starter Pack" }];
+
+  try {
+    const invoiceLink = await bot.api.createInvoiceLink(
+      title,
+      description,
+      payload,
+      "", // Токен провайдера для Telegram Stars пустой
+      currency,
+      prices
+    );
+
+    const paymentId = 'some-generated-payment-id'; // Замените на реальную логику
+    res.json({ invoiceLink, paymentId });
+  } catch (error) {
+    res.status(500).json({ error: 'Не удалось создать ссылку для счета' });
+  }
+});
+
+
 
 // Старт бота
 bot.start();
